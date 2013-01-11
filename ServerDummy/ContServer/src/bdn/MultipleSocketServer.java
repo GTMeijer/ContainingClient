@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 package bdn;
-import java.net.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +16,7 @@ import java.util.List;
  */
 public class MultipleSocketServer implements Runnable
 {
-    private Socket connection;
-    private String TimeStamp;
-    private int ID;
+
     
     public static void main(String[] args)
     {
@@ -45,13 +43,7 @@ public class MultipleSocketServer implements Runnable
             
         }
     }
-    
-    MultipleSocketServer(Socket s, int i)
-    {
-        this.connection = s;
-        this.ID = i;
-    }
-    
+
     public void run()
     {
         try
@@ -120,4 +112,4 @@ public class MultipleSocketServer implements Runnable
         
         return returnList;
     }
-}
+} 

@@ -186,7 +186,7 @@ public class Main extends SimpleApplication {
     private List<String> getServerUpdate()
     {
         //Define the class and method names
-        String className = "bdn.MultipleSocketServer";
+        String className = "projectcontaining.Networking.Connection";
         String methodName = "getUpdate";
      
         //Define the parameter types and values
@@ -210,7 +210,6 @@ public class Main extends SimpleApplication {
             ObjectInputStream ois = new ObjectInputStream(connection.getInputStream());
             //Object object = ois.readObject(); // Read the object
             List<String> updatedList = (List<String>)ois.readObject();
-            
 
             System.out.println("New update list recieved.");
             
