@@ -14,26 +14,21 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Spatial;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mygame.Networking.ClientConnection;
 
 /**
  * test
- * @author normenhansen
+ * @author Kuchinawa
  */
 public class Main extends SimpleApplication {
     
-    final String host = "127.0.0.1";
-    final int port = 9999;
-    Socket connection;
-    InetAddress address;
-    Integer lastUpdate = 0;
+    ClientConnection client;
     
     List<Spatial> ships;
     List<Spatial> containers;
@@ -49,25 +44,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         Logger.getLogger("").setLevel(Level.SEVERE);
-        try
-        {
-            //Get the IP adress
-            address = InetAddress.getByName(host);
-            
-            //Establish a socket connection
-            connection = new Socket(address, port);
-                    
-            System.out.println("Connection Initialized");
-        }
-        catch(IOException ioEx)
-        {
-            System.out.println(ioEx);
-        }
-        catch(Exception ex)
-        {
-            System.out.println(ex);
-        }
         
+        client = new ClientConnection();
         
         flyCam.setMoveSpeed(100);
         
@@ -174,7 +152,7 @@ public class Main extends SimpleApplication {
         
         if(updateTimeElapsed > 1)
         {
-            List<String> testList = getServerUpdate();
+            List<String> testList = client.getServerUpdate();
         
             for(Spatial container : containers)
                 container.move(0,0, Integer.parseInt(testList.get(0)));
@@ -183,51 +161,7 @@ public class Main extends SimpleApplication {
         }
     }
 
-    private List<String> getServerUpdate()
-    {
-        //Define the class and method names
-        String className = "projectcontaining.Networking.Connection";
-        String methodName = "getUpdate";
-     
-        //Define the parameter types and values
-        //Class[] methodParamTypes = { Integer.class };
-        Class[] methodParamTypes = { };
-        Object[] methodParams = { };
-        
-        try
-        {
-            //Make a new connection
-            connection = new Socket(address, port);
-            
-            //And send the class, method and parameter info through it
-            ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
-            out.writeObject(className);
-            out.writeObject(methodName);
-            out.writeObject(methodParamTypes);
-            out.writeObject(methodParams);
-            
-            //Get input and cast it to the right type
-            ObjectInputStream ois = new ObjectInputStream(connection.getInputStream());
-            //Object object = ois.readObject(); // Read the object
-            List<String> updatedList = (List<String>)ois.readObject();
-
-            System.out.println("New update list recieved.");
-            
-            lastUpdate++;
-            
-            return updatedList;
-        }
-        catch(IOException ioEx)
-        {
-            System.out.println(ioEx);
-        }
-        catch(Exception ex)
-        {
-            System.out.println(ex);
-        }
-        return null;
-
-    }
+    
     
     
     @Override

@@ -1,0 +1,4 @@
+
+*.class
+
+build/test/classes/projectcontaining/locations/RiverBoatPlatformTest.class
