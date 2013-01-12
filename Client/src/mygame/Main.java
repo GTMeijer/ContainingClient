@@ -47,6 +47,7 @@ public class Main extends SimpleApplication {
         
         client = new ClientConnection();
         
+        setPauseOnLostFocus(false);
         flyCam.setMoveSpeed(100);
         
         //Load Ships
@@ -154,8 +155,9 @@ public class Main extends SimpleApplication {
         {
             List<String> testList = client.getServerUpdate();
         
-            for(Spatial container : containers)
-                container.move(0,0, Integer.parseInt(testList.get(0)));
+            if(!testList.isEmpty())
+                for(Spatial container : containers)
+                    container.move(0,0, Integer.parseInt(testList.get(0)));
             
             updateTimeElapsed = 0;
         }

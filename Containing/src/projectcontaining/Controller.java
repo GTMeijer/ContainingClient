@@ -7,6 +7,7 @@ import java.util.Stack;
 import java.util.Timer;
 import projectcontaining.AgvSystem.AgvManager;
 import projectcontaining.AgvSystem.AgvRequest;
+import projectcontaining.Networking.UpdateList;
 import projectcontaining.locations.*;
 import projectcontaining.xmlparser.ContainerData;
 import projectcontaining.xmlparser.XmlFileParser;
@@ -37,10 +38,16 @@ public class Controller {
     Timer _updateTimer;
     private Stack<DateTime> _arriveTimeStack;
     
+    // Update List
+    UpdateList updateList;
+    
     /**
      * Constructor
      */
-    public Controller() {
+    public Controller(UpdateList updateList) {
+        
+        this.updateList = updateList;
+        
         // Initalize parts
         this._seaShipPlatform = new SeaShipPlatform();
         this._trainPlatform = new TrainPlatform();

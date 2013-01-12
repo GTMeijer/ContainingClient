@@ -18,20 +18,25 @@ import java.util.List;
  * This class handles a single client thread.
  * @author Kuchinawa
  */
-public class Connection implements Runnable{
+public class Connection implements Runnable
+{
     
     
     private int ID;
     Socket connection;
     
-    Connection(Socket connection)
+    UpdateList updateList;
+    
+    Connection(Socket connection, int ID, UpdateList updateList)
     {
         this.connection = connection;
+        this.ID = ID;
+        this.updateList = updateList;
     }
     
-    
     @Override
-    public void run() {
+    public void run() 
+    {
         try
         {
             //Get send message
@@ -44,6 +49,7 @@ public class Connection implements Runnable{
                 //Set called Class and Method
                 String className = (String)in.readObject();
                 String methodName = (String)in.readObject();
+                //Set called Class and Method
 
                 //Parameters
                 Class[] methodParamTypes = (Class[])in.readObject();
@@ -68,9 +74,9 @@ public class Connection implements Runnable{
                     returnValue = meth.invoke(this);
                 }
 
-                Thread.sleep(100); // Test stuff
+                //Thread.sleep(100); // Test stuff
 
-                System.out.println(this.ID);
+                System.out.println("Request from client: " + this.ID);
                 
 
                 oos.writeObject(returnValue);
@@ -91,7 +97,6 @@ public class Connection implements Runnable{
             try
             {
                 connection.close();
-                SocketServer.count--;
             }
             catch(IOException e)
             {
@@ -99,13 +104,10 @@ public class Connection implements Runnable{
         }
     }
     
-    
-    /* TEST */
-    public List<String> getUpdate()
+    private List<String> getUpdate()
     {
-        List<String> returnList = new ArrayList<String>();
-        returnList.add( "1" );
-        
+        //Copy List for thread safety
+        List<String> returnList = updateList.getUpdate();
         return returnList;
     }
 }

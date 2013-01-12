@@ -37,6 +37,7 @@ public class ClientConnection {
             
             //Establish a socket connection
             connection = new Socket(address, port);
+            connection.setSoTimeout(5000);
             out = new ObjectOutputStream(connection.getOutputStream());
             ois = new ObjectInputStream(connection.getInputStream());
             System.out.println("Connection Initialized");

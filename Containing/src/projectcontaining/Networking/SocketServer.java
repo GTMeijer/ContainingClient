@@ -28,10 +28,14 @@ public class SocketServer implements Runnable
     ServerSocket socket1;
     static int count = 0;
     
-    public SocketServer()
+    UpdateList updateList;
+    
+    public SocketServer(UpdateList updateList)
     {
         try
         {
+            this.updateList = updateList;
+            
             socket1 = new ServerSocket(port);
         }
         catch(IOException ex)
@@ -49,12 +53,11 @@ public class SocketServer implements Runnable
             {
                 //Setup new socket thread when a new connection is created
                 Socket connection = socket1.accept();
-                Runnable runnable = new Connection(connection);
+                Runnable runnable = new Connection(connection, count, updateList);
                 SocketServer.count++;
                 System.out.println("New Request");
                 Thread thread = new Thread(runnable);
                 thread.start();
-                
             } 
             catch (IOException ex) 
             {
