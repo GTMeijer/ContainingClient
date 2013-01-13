@@ -155,11 +155,11 @@ public class Main extends SimpleApplication {
         
         if(updateTimeElapsed > 1)
         {
-            List<String> testList = client.getServerUpdate(updateList.size());
+            List<List<Float>> testList = client.getServerUpdate(updateList.size());
         
             if(!testList.isEmpty())
                 for(Spatial container : containers)
-                    container.move(0,0, Integer.parseInt(testList.get(0)));
+                    container.move(0,0, testList.get(0).get(0));
             
             updateTimeElapsed = 0;
         }
