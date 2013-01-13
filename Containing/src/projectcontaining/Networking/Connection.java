@@ -52,7 +52,9 @@ public class Connection implements Runnable
                 System.out.println(new Timestamp(currentDateTime.getTime()) + " Request from client: " + this.ID);
                 
                 //Send Output
-                oos.writeObject(getUpdate(recieved));
+                List<List<Float>> returnList = getUpdate(recieved);
+                
+                oos.writeObject(returnList);
                 
                 
                 System.out.println(new Timestamp(currentDateTime.getTime()) + " Reply sent to client: " + this.ID);

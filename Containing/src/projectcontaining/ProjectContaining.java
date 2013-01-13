@@ -22,8 +22,17 @@ public class ProjectContaining {
         Runnable serverThread = new SocketServer(updateList);
         Thread server = new Thread(serverThread);
         server.start();
+                
+        Thread.sleep(5000);
         
+        Float[] asad = new Float[1];
+        
+        asad[0] = 1.0f;
+        
+        updateList.add(asad);
+
         Controller contr = new Controller(updateList);
+        
         
         contr.test();
     }

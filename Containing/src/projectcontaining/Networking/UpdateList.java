@@ -30,11 +30,13 @@ public class UpdateList {
     
     public synchronized List<List<Float>> getUpdate(int updatesRecieved)
     {
-        List<List<Float>> returnList;
+        List<List<Float>> returnList = new ArrayList<>();
+        
         if(!syncList.isEmpty())
-            returnList = syncList.subList(updatesRecieved, syncList.size() - 1);
-        else
-            returnList = new ArrayList<>();
+        {
+            if(syncList.size() > updatesRecieved)
+                returnList = new ArrayList<>(syncList.subList(updatesRecieved, syncList.size()));
+        }
         
         return returnList;
     }

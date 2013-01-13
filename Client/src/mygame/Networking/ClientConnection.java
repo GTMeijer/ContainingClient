@@ -19,7 +19,7 @@ import java.util.List;
  * between the Client and the Server.
  * @author Kuchinawa
  */
-public class ClientConnection
+public class ClientConnection implements Runnable
 {
     //IP and port of the server
     final String host = "127.0.0.1";
@@ -27,22 +27,28 @@ public class ClientConnection
     Socket connection;
     InetAddress address;
     
+    List<List<Float>> updateList;
+    
     //I/O Streams
     ObjectOutputStream out;
     ObjectInputStream ois;
     
-    public ClientConnection()
+    public ClientConnection(List<List<Float>> updateList)
     {
         try
         {
+            this.updateList = updateList;
+            
             //Get the IP adress
             address = InetAddress.getByName(host);
             
             //Establish a socket connection
             connection = new Socket(address, port);
             connection.setSoTimeout(5000);
+            
             out = new ObjectOutputStream(connection.getOutputStream());
             ois = new ObjectInputStream(connection.getInputStream());
+            
             System.out.println("Connection Initialized");
         }
         catch(IOException ioEx)
@@ -55,30 +61,39 @@ public class ClientConnection
         }
     }
     
-    public List<List<Float>> getServerUpdate(int updatesRecieved)
-    {
-        try
+    public void run() {
+        while(true)
         {
-            //Send update count
-            out.writeObject(updatesRecieved);
-            
-            //Get input and cast it to the right type
-            List<List<Float>> updatedList = (List<List<Float>>)ois.readObject();
-
-            Date currentDateTime = new Date();
-            
-            System.out.println(new Timestamp(currentDateTime.getTime()) + "New update list recieved.");
-            
-            return updatedList;
+            try
+            {
+                //Send update count
+                //out.writeObject(updateList.size());
+                out.writeObject(updateList.size());
+                
+                //Get input and cast it to the right type
+                //List<List<Float>> additions = ((List<List<Float>>)ois.readObject());
+                
+                List<List<Float>> newEntries = (List<List<Float>>)ois.readObject();
+                
+                if(!newEntries.isEmpty())
+                    updateList.addAll(newEntries);
+                
+                
+                
+                Date currentDateTime = new Date();
+                System.out.println(new Timestamp(currentDateTime.getTime()) + "New update list recieved.");
+                
+                Thread.sleep(1000);
+            }
+            catch(IOException ioEx)
+            {
+                System.out.println(ioEx);
+            }
+            catch(Exception ex)
+            {
+                System.out.println(ex);
+                ex.printStackTrace();
+            }
         }
-        catch(IOException ioEx)
-        {
-            System.out.println(ioEx);
-        }
-        catch(Exception ex)
-        {
-            System.out.println(ex);
-        }
-        return new ArrayList<List<Float>>();
     }
 }

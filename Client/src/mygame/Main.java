@@ -13,9 +13,6 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Spatial;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,8 +43,11 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         Logger.getLogger("").setLevel(Level.SEVERE);
         
-        client = new ClientConnection();
         updateList = new ArrayList<List<Float>>();
+        client = new ClientConnection(updateList);
+        
+        Thread thread = new Thread(client);
+        thread.start();
         
         setPauseOnLostFocus(false);
         flyCam.setMoveSpeed(100);
@@ -155,11 +155,9 @@ public class Main extends SimpleApplication {
         
         if(updateTimeElapsed > 1)
         {
-            List<List<Float>> testList = client.getServerUpdate(updateList.size());
-        
-            if(!testList.isEmpty())
+            if(!updateList.isEmpty())
                 for(Spatial container : containers)
-                    container.move(0,0, testList.get(0).get(0));
+                    container.move(0,0, updateList.get(0).get(0));
             
             updateTimeElapsed = 0;
         }
