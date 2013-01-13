@@ -66,19 +66,23 @@ public class ClientConnection implements Runnable
         {
             try
             {
-                //Send update count
-                //out.writeObject(updateList.size());
-                out.writeObject(updateList.size());
+                //Send update count, synch for thread safety
+                synchronized(updateList)
+                {
+                    out.writeObject(updateList.size());
+                }
                 
                 //Get input and cast it to the right type
-                //List<List<Float>> additions = ((List<List<Float>>)ois.readObject());
-                
                 List<List<Float>> newEntries = (List<List<Float>>)ois.readObject();
                 
+                //Add new entries to the updateList, synch for thread safety
                 if(!newEntries.isEmpty())
-                    updateList.addAll(newEntries);
-                
-                
+                {
+                    synchronized(updateList)
+                    {
+                        updateList.addAll(newEntries);
+                    }
+                }
                 
                 Date currentDateTime = new Date();
                 System.out.println(new Timestamp(currentDateTime.getTime()) + "New update list recieved.");

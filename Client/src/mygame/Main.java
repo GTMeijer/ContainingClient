@@ -153,12 +153,16 @@ public class Main extends SimpleApplication {
         
         updateTimeElapsed += tpf;
         
+        //Check the update list ever n second
         if(updateTimeElapsed > 1)
         {
-            if(!updateList.isEmpty())
-                for(Spatial container : containers)
-                    container.move(0,0, updateList.get(0).get(0));
-            
+            //Synch for thread safety
+            synchronized(updateList)
+            {
+                if(!updateList.isEmpty())
+                    for(Spatial container : containers)
+                        container.move(0,0, updateList.get(0).get(0));
+            }
             updateTimeElapsed = 0;
         }
     }
