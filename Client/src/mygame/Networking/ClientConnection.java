@@ -9,7 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,7 +19,8 @@ import java.util.List;
  * between the Client and the Server.
  * @author Kuchinawa
  */
-public class ClientConnection {
+public class ClientConnection
+{
     //IP and port of the server
     final String host = "127.0.0.1";
     final int port = 9999;
@@ -52,29 +55,19 @@ public class ClientConnection {
         }
     }
     
-    public List<String> getServerUpdate()
+    public List<List<Float>> getServerUpdate(int updatesRecieved)
     {
-        //Define the class and method names
-        String className = "projectcontaining.Networking.Connection";
-        String methodName = "getUpdate";
-        
-        //Define the parameter types and values
-        //Class[] methodParamTypes = { Integer.class };
-        Class[] methodParamTypes = { };
-        Object[] methodParams = { };
-        
         try
         {
-            //Send the class, method and parameter info
-            out.writeObject(className);
-            out.writeObject(methodName);
-            out.writeObject(methodParamTypes);
-            out.writeObject(methodParams);
+            //Send update count
+            out.writeObject(updatesRecieved);
             
             //Get input and cast it to the right type
-            List<String> updatedList = (List<String>)ois.readObject();
+            List<List<Float>> updatedList = (List<List<Float>>)ois.readObject();
 
-            System.out.println("New update list recieved.");
+            Date currentDateTime = new Date();
+            
+            System.out.println(new Timestamp(currentDateTime.getTime()) + "New update list recieved.");
             
             return updatedList;
         }
@@ -86,6 +79,6 @@ public class ClientConnection {
         {
             System.out.println(ex);
         }
-        return new ArrayList<String>();
+        return new ArrayList<List<Float>>();
     }
 }

@@ -29,6 +29,7 @@ import mygame.Networking.ClientConnection;
 public class Main extends SimpleApplication {
     
     ClientConnection client;
+    List<List<Float>> updateList;
     
     List<Spatial> ships;
     List<Spatial> containers;
@@ -46,6 +47,7 @@ public class Main extends SimpleApplication {
         Logger.getLogger("").setLevel(Level.SEVERE);
         
         client = new ClientConnection();
+        updateList = new ArrayList<List<Float>>();
         
         setPauseOnLostFocus(false);
         flyCam.setMoveSpeed(100);
@@ -153,7 +155,7 @@ public class Main extends SimpleApplication {
         
         if(updateTimeElapsed > 1)
         {
-            List<String> testList = client.getServerUpdate();
+            List<String> testList = client.getServerUpdate(updateList.size());
         
             if(!testList.isEmpty())
                 for(Spatial container : containers)

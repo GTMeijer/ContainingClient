@@ -5,6 +5,7 @@
 package projectcontaining.Networking;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,20 +15,27 @@ import java.util.List;
  */
 public class UpdateList {
     
-    List<String> syncList;
+    List<List<Float>> syncList;
     
     public UpdateList()
     {
-         syncList = Collections.synchronizedList(new ArrayList<String>());
+         syncList = Collections.synchronizedList(new ArrayList<List<Float>>());
     }
     
-    public synchronized void add(String data)
+    public synchronized void add(Float[] coordList)
     {
-        syncList.add(data);
+        List<Float> addList = Collections.synchronizedList(Arrays.asList(coordList));
+        syncList.add(addList);
     }
     
-    public synchronized List<String> getUpdate()
+    public synchronized List<List<Float>> getUpdate(int updatesRecieved)
     {
-        return syncList;
+        List<List<Float>> returnList;
+        if(!syncList.isEmpty())
+            returnList = syncList.subList(updatesRecieved, syncList.size() - 1);
+        else
+            returnList = new ArrayList<>();
+        
+        return returnList;
     }
 }

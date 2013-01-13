@@ -7,11 +7,9 @@ package projectcontaining.Networking;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,46 +44,25 @@ public class Connection implements Runnable
             //Main loop that keeps checking for a client request
             while(true)
             {
-                //Set called Class and Method
-                String className = (String)in.readObject();
-                String methodName = (String)in.readObject();
-                //Set called Class and Method
-
-                //Parameters
-                Class[] methodParamTypes = (Class[])in.readObject();
-                Object[] methodParams = (Object[])in.readObject();
-
-                //Call the Class and Method
-                Class cl = Class.forName(className);
-
-                Method meth;
-                Object returnValue;
-
-                if(methodParamTypes != null)
-                {
-                    meth = cl.getDeclaredMethod(methodName, methodParamTypes);
-                    //Store the returnValue
-                    returnValue = meth.invoke(this, methodParams);
-                }
-                else
-                {
-                    meth = cl.getDeclaredMethod(methodName);
-                    //Store the returnValue
-                    returnValue = meth.invoke(this);
-                }
-
+                //Get Input
+                int recieved = (Integer)in.readObject();
+                
+                Date currentDateTime = new Date();
+                
+                System.out.println(new Timestamp(currentDateTime.getTime()) + " Request from client: " + this.ID);
+                
+                //Send Output
+                oos.writeObject(getUpdate(recieved));
+                
+                
+                System.out.println(new Timestamp(currentDateTime.getTime()) + " Reply sent to client: " + this.ID);
+                
                 //Thread.sleep(100); // Test stuff
 
-                System.out.println("Request from client: " + this.ID);
                 
-
-                oos.writeObject(returnValue);
+                
                 oos.flush();
             }
-        }
-        catch(ClassNotFoundException | NoSuchMethodException | IOException | IllegalAccessException | InvocationTargetException ex)
-        {
-            System.out.println(ex);
         }
         catch(Exception ex)
         {
@@ -104,10 +81,10 @@ public class Connection implements Runnable
         }
     }
     
-    private List<String> getUpdate()
+    private List<List<Float>> getUpdate(int updatesRecieved)
     {
         //Copy List for thread safety
-        List<String> returnList = updateList.getUpdate();
+        List<List<Float>> returnList = updateList.getUpdate(updatesRecieved);
         return returnList;
     }
 }
