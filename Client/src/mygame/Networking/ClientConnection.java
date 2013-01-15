@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import projectcontaining.SimulationStates;
 
 /**
  * This class handles all the Network Communication 
@@ -27,13 +28,13 @@ public class ClientConnection implements Runnable
     Socket connection;
     InetAddress address;
     
-    List<List<Float>> updateList;
+    List<List<SimulationStates>> updateList;
     
     //I/O Streams
     ObjectOutputStream out;
     ObjectInputStream ois;
     
-    public ClientConnection(List<List<Float>> updateList)
+    public ClientConnection(List<List<SimulationStates>> updateList)
     {
         try
         {
@@ -73,7 +74,7 @@ public class ClientConnection implements Runnable
                 }
                 
                 //Get input and cast it to the right type
-                List<List<Float>> newEntries = (List<List<Float>>)ois.readObject();
+                List<List<SimulationStates>> newEntries = (List<List<SimulationStates>>)ois.readObject();
                 
                 //Add new entries to the updateList, synch for thread safety
                 if(!newEntries.isEmpty())

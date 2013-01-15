@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import projectcontaining.SimulationStates;
 
 /**
  * This class handles a single client thread.
@@ -51,7 +52,7 @@ public class Connection implements Runnable
                 System.out.println(new Timestamp(currentDateTime.getTime()) + " Request from client: " + this.ID);
                 
                 //Send Output
-                List<List<Float>> returnList = getUpdate(recieved);
+                List<List<SimulationStates>> returnList = getUpdate(recieved);
                 oos.writeObject(returnList);
                 
                 
@@ -82,10 +83,10 @@ public class Connection implements Runnable
         }
     }
     
-    private List<List<Float>> getUpdate(int updatesRecieved)
+    private List<List<SimulationStates>> getUpdate(int updatesRecieved)
     {
         //Copy List for thread safety
-        List<List<Float>> returnList = updateList.getUpdate(updatesRecieved);
+        List<List<SimulationStates>> returnList = updateList.getUpdate(updatesRecieved);
         return returnList;
     }
 }

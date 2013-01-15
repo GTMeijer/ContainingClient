@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import projectcontaining.SimulationStates;
 
 /**
  *
@@ -15,22 +16,22 @@ import java.util.List;
  */
 public class UpdateList {
     
-    List<List<Float>> syncList;
+    List<List<SimulationStates>> syncList;
     
     public UpdateList()
     {
-         syncList = Collections.synchronizedList(new ArrayList<List<Float>>());
+         syncList = Collections.synchronizedList(new ArrayList<List<SimulationStates>>());
     }
     
-    public synchronized void add(Float[] coordList)
+    public synchronized void add(SimulationStates[] coordList)
     {
-        List<Float> addList = Collections.synchronizedList(Arrays.asList(coordList));
+        List<SimulationStates> addList = Collections.synchronizedList(Arrays.asList(coordList));
         syncList.add(addList);
     }
     
-    public synchronized List<List<Float>> getUpdate(int updatesRecieved)
+    public synchronized List<List<SimulationStates>> getUpdate(int updatesRecieved)
     {
-        List<List<Float>> returnList = new ArrayList<>();
+        List<List<SimulationStates>> returnList = new ArrayList<>();
         
         if(!syncList.isEmpty())
         {

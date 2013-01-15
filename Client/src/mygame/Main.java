@@ -18,15 +18,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.Networking.ClientConnection;
+import projectcontaining.SimulationStates;
 
-/**
+/**q
  * test
  * @author Kuchinawa
  */
 public class Main extends SimpleApplication {
     
     ClientConnection client;
-    List<List<Float>> updateList;
+    List<List<SimulationStates>> updateList;
     
     List<Spatial> ships;
     List<Spatial> containers;
@@ -43,7 +44,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         Logger.getLogger("").setLevel(Level.SEVERE);
         
-        updateList = new ArrayList<List<Float>>();
+        updateList = new ArrayList<List<SimulationStates>>();
         client = new ClientConnection(updateList);
         
         Thread thread = new Thread(client);
@@ -161,7 +162,9 @@ public class Main extends SimpleApplication {
             {
                 if(!updateList.isEmpty())
                     for(Spatial container : containers)
-                        container.move(0,0, updateList.get(0).get(0));
+                    {
+                        //container.move(0,0, updateList.get(0).get(0));
+                    }
             }
             updateTimeElapsed = 0;
         }
