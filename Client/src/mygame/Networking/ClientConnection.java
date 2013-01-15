@@ -10,13 +10,13 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * This class handles all the Network Communication 
  * between the Client and the Server.
+ * 
  * @author Kuchinawa
  */
 public class ClientConnection implements Runnable

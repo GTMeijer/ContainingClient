@@ -37,7 +37,7 @@ public class Connection implements Runnable
     {
         try
         {
-            //Get send message
+            //Instantiate the I/O streams
             ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(connection.getOutputStream());
             
@@ -48,12 +48,10 @@ public class Connection implements Runnable
                 int recieved = (Integer)in.readObject();
                 
                 Date currentDateTime = new Date();
-                
                 System.out.println(new Timestamp(currentDateTime.getTime()) + " Request from client: " + this.ID);
                 
                 //Send Output
                 List<List<Float>> returnList = getUpdate(recieved);
-                
                 oos.writeObject(returnList);
                 
                 
@@ -66,7 +64,7 @@ public class Connection implements Runnable
                 oos.flush();
             }
         }
-        catch(Exception ex)
+        catch(IOException | ClassNotFoundException ex)
         {
             System.out.println(ex);
             ex.printStackTrace();
@@ -77,8 +75,9 @@ public class Connection implements Runnable
             {
                 connection.close();
             }
-            catch(IOException e)
+            catch(IOException ex)
             {
+                ex.printStackTrace();
             }
         }
     }

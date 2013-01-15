@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import projectcontaining.Networking.UpdateList;
 
 /**
  *
@@ -29,7 +30,10 @@ public class ControllerTest {
     public void testLoadXmlFile() {
         System.out.println("loadXmlFile");
         String filePath = "";
-        Controller instance = new Controller();
+        
+        UpdateList updateList = new UpdateList();
+        
+        Controller instance = new Controller(updateList);
         boolean expResult = true;
         boolean result = instance.loadXmlFile(filePath);
         assertEquals(expResult, result);
@@ -42,7 +46,9 @@ public class ControllerTest {
     public void testReset() {
         System.out.println("reset");
         
-        Controller instance = new Controller();
+        UpdateList updateList = new UpdateList();
+        
+        Controller instance = new Controller(updateList);
         instance.reset();
         
         // TODO review the generated test code and remove the default call to fail.

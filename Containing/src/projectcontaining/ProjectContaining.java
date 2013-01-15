@@ -1,7 +1,5 @@
 package projectcontaining;
 
-import javax.xml.bind.annotation.XmlElementDecl;
-import org.omg.CORBA.TIMEOUT;
 import projectcontaining.Networking.SocketServer;
 import projectcontaining.Networking.UpdateList;
 
@@ -22,18 +20,22 @@ public class ProjectContaining {
         Runnable serverThread = new SocketServer(updateList);
         Thread server = new Thread(serverThread);
         server.start();
-                
-        Thread.sleep(5000);
         
-        Float[] asad = new Float[1];
         
-        asad[0] = 1.0f;
+//        while(true)
+//        {
+//            Thread.sleep(500);
+//
+//            Float[] asad = new Float[1];
+//
+//            asad[0] = 1.0f;
+//
+//            updateList.add(asad);
+//
+//            
+//        }
         
-        updateList.add(asad);
-
         Controller contr = new Controller(updateList);
-        
-        
         contr.test();
     }
 }
