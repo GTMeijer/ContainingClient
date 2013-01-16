@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import projectcontaining.SimulationStates;
 
 /**
  *
@@ -52,15 +53,20 @@ public class ConnectionTest {
         System.out.println("run");
         
         UpdateList instanceList = new UpdateList();
-        instanceList.add(new Float[] { 1.0f } );
         
-        List<List<Float>> testList = new ArrayList<List<Float>>();;
+        SimulationStates state = new SimulationStates();
+        state.AgvLocations[0][0] = 1.0f;
+        
+        instanceList.add(new SimulationStates[] { state });
+        
+        List<List<SimulationStates>> testList = new ArrayList<List<SimulationStates>>();;
 
         Connection instance;
         
         try
         {
-            instance = new Connection(new Socket("127.0.0.1", 9999), 1, instanceList);
+            Socket testSocket = new Socket("127.0.0.1", 9999);
+            instance = new Connection(testSocket, 1, instanceList);
             Thread thread = new Thread(instance);
             thread.start();
             
@@ -74,14 +80,14 @@ public class ConnectionTest {
             
             oos.writeObject(0);
             //Get input and cast it to the right type
-            List<List<Float>> newEntries = (List<List<Float>>)oin.readObject();
+            List<List<SimulationStates>> newEntries = (List<List<SimulationStates>>)oin.readObject();
             testList.addAll(newEntries);
             
         }
         catch (IOException | ClassNotFoundException ex)
         {
             Logger.getLogger(ConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("exception");
+            fail("Exception");
         }
         
         assertTrue("Values did not successfully add", testList.size() == 1);

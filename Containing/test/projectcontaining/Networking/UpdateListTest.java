@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import projectcontaining.SimulationStates;
 
 /**
  *
@@ -47,11 +48,15 @@ public class UpdateListTest {
         System.out.println("add");
         
         //Instantiate the expected list and add a value
-        List<Float> expected = Collections.synchronizedList(new ArrayList<Float>());
-        expected.add(0.0f);
+        List<SimulationStates> expected = Collections.synchronizedList(new ArrayList<SimulationStates>());
+        
+        SimulationStates expectedState = new SimulationStates();
+        expectedState.AgvLocations[0][0] = 1.0f;
+        
+        expected.add(expectedState);
         
         //Instantiate test list and add it to the UpdateList through the add method
-        Float[] coordList = { 0.0f };
+        SimulationStates[] coordList = { expectedState };
         UpdateList instance = new UpdateList();
         instance.add(coordList);
         
@@ -66,24 +71,37 @@ public class UpdateListTest {
     public void testGetUpdate() {
         
         System.out.println("getUpdate");
-        int updatesRecieved = 2;
+        int updatesRecieved = 0;
         
         UpdateList instance = new UpdateList();
-        instance.add( new Float[] { 0.0f , 1.0f, 2.0f } );
-        instance.add( new Float[] { 2.0f , 3.0f, 4.0f } );
-        instance.add( new Float[] { 5.0f , 2.0f, 1.0f } );
+
+        //Create test data
+        SimulationStates testState1 = new SimulationStates();
+        testState1.AgvLocations[0][0] = 0.0f;
+        SimulationStates testState2 = new SimulationStates();
+        testState1.AgvLocations[0][0] = 2.0f;
+        SimulationStates testState3 = new SimulationStates();
+        testState1.AgvLocations[0][0] = 5.0f;
         
-        //List<List<Float>> syncList;
-        List expResult = Collections.synchronizedList(new ArrayList<List<Float>>());
-        List<Float> addList = Collections.synchronizedList(new ArrayList<Float>());
-        addList.add(5.0f);
-        addList.add(2.0f);
-        addList.add(1.0f);
+        //Add data to array
+        SimulationStates[] expectedStates = new SimulationStates[] { testState1 , testState2, testState3};
+        
+        //Add with add method
+        instance.add(expectedStates);
+        
+        //Instantiate expected list
+        List expResult = Collections.synchronizedList(new ArrayList<List<SimulationStates>>());
+        List<SimulationStates> addList = Collections.synchronizedList(new ArrayList<SimulationStates>());
+
+        //Add test data to the expected list
+        addList.add(testState1);
+        addList.add(testState2);
+        addList.add(testState3);
         
         expResult.add(addList);
         
-        
+        //Get result and compare with expected
         List result = instance.getUpdate(updatesRecieved);
-        assertEquals(expResult, result);
+        assertArrayEquals(expResult.toArray(), result.toArray());
     }
 }

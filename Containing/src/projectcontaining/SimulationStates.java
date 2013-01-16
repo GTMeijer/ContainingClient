@@ -14,7 +14,7 @@ public class SimulationStates {
      * [i][3] = destination y
      * [i][4] = 1=loaded, 0=not loaded
      */
-    public float[][] AgvLocations;
+    public float[][] AgvLocations = new float[10][10];
     
     /**
      * i = index

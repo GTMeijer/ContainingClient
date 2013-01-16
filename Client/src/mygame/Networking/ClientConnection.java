@@ -86,7 +86,7 @@ public class ClientConnection implements Runnable
                 }
                 
                 Date currentDateTime = new Date();
-                System.out.println(new Timestamp(currentDateTime.getTime()) + "New update list recieved.");
+                System.out.println(new Timestamp(currentDateTime.getTime()) + " New update list recieved.");
                 
                 Thread.sleep(1000);
             }
